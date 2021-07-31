@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		<form>
+			<input type="text" id="number" value="">
+			<input type="button" value="Submit" onclick="callapi()"/>
+		</form>
+	<script src="socket.io.js"></script>
+	<script>
+		let socket = io.connect('http://localhost:3030');
+		socket.emit('join', "user1");
+		socket.on("multiplication_table_client", (message) => {
+            console.log(message)
+        });
+		function callapi(){
+			var number = parseInt(document.getElementById('number').value);
+			const url = 'http://localhost:8080/multiplication-table';
+			const input = {
+				number: number
+			};
+			const request = new Request(url, {
+				method: 'POST',
+				body: JSON.stringify(input),
+				headers: new Headers({
+					'Content-Type': 'application/json'
+				})
+			});
+			fetch(request).then(res => res.json()).then(res => console.log(res));
+		}
+	</script>
+</body>
+</html>
